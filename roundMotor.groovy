@@ -43,6 +43,13 @@ CSG getNut(){
 	}
 	CSG wholeMotor = CSG.unionAll([pshaft,bolts,body])
 					.movex(-shaftCenterOffset)
+	wholeMotor.addSlicePlane(new Transform())
+	wholeMotor.addSlicePlane(new Transform()
+						.movez(-1)
+	)
+	wholeMotor.addSlicePlane(new Transform()
+						.movez(shaftCollarHeight+0.1)
+	)
 	//return wholeMotor
 	return wholeMotor
 		.setParameter(size)
