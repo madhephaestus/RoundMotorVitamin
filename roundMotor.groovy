@@ -8,18 +8,19 @@ CSG getNut(){
 										args.get(0),
 										Vitamins.listVitaminSizes(type))
 	//println "Database loaded "+database
-	HashMap<String,Object> servoConfig = Vitamins.getConfiguration( type,size.getStrValue())
+	HashMap<String,Object> config = Vitamins.getConfiguration( type,size.getStrValue())
 	// Measurments from http://image.dfrobot.com/image/data/FIT0185/FIT0185_Dimension.PNG
 	LengthParameter printerOffset = new LengthParameter("printerOffset",0.25,[2,0.001])
-	double boltHoleDiameter = 31
-	double shaftCenterOffset = 7.0
-	double shaftCollarDiameter = (12.0/2.0)+printerOffset.getMM()
-	double shaftCollarHeight = 5.8 
-	double motorBodyRadius = (37.0/2.0)+printerOffset.getMM()
-	double bodyLength=75.0
-	double shaftDiameter = 6.0
-	double totalShaftLength = 21
-	double dShaftSection = 12
+	double boltHoleDiameter = config.boltHolePatternDiameter
+	double shaftCenterOffset = config.shaftCenterOffset
+	double shaftCollarDiameter = (config.shaftCollarDiameter/2.0)+printerOffset.getMM()
+	double shaftCollarHeight = config.shaftCollarHeight 
+	double motorBodyRadius = (config.motorBodyRadius/2.0)+printerOffset.getMM()
+	double bodyLength=config.bodyLength
+	HashMap<String,Object> configShaft = Vitamins.getConfiguration( "dShaft",config.dshaft)
+	double shaftDiameter = configShaft.shaftDiameter
+	double totalShaftLength = config.totalShaftLength
+	double dShaftSection =configShaft.length
 	double dShaftStart = totalShaftLength-dShaftSection
 	double shaftRadius = (shaftDiameter/2)+printerOffset.getMM()
 	LengthParameter boltLength		= new LengthParameter("Bolt Length",10,[180,10])
@@ -28,9 +29,9 @@ CSG getNut(){
 				.toZMax()
 	CSG collar =new Cylinder(shaftCollarDiameter,shaftCollarDiameter,shaftCollarHeight,(int)30).toCSG() // a one line Cylinder
 	CSG shaft =new Cylinder(shaftRadius,shaftRadius,dShaftStart,(int)30).toCSG() // a one line Cylinder
-	CSG bolt = Vitamins.get("capScrew","M3")
+	CSG bolt = Vitamins.get(config.boltType,config.boltSize)
 				.toolOffset(printerOffset.getMM())
-				.movez(printerOffset.getMM()/2)
+				.movez(printerOffset.getMM())
 				.rotx(180)
 				.movey(boltHoleDiameter/2)
 
@@ -38,13 +39,13 @@ CSG getNut(){
 				    .gitScriptRun(
 					"https://github.com/WPIRoboticsEngineering/RBELabCustomParts.git", // git location of the library
 					      "dShaft.groovy" , // file to load
-					      [shaftDiameter,5.34,dShaftSection]
+					      [shaftDiameter,configShaft.shaftDSectionDiameter,dShaftSection]
 				)
 				.movez(dShaftStart)
 				.union([collar,shaft])
 						.movex(shaftCenterOffset)
 	CSG bolts = bolt
-	for(int i=60;i<360;i+=60){
+	for(int i=config.boltHolePatternAngleOffset;i<360;i+=config.boltHolePatternAngleIncrement){
 		bolts=bolts.union(bolt.rotz(i))
 	}
 	CSG wholeMotor = CSG.unionAll([pshaft,bolts,body])
