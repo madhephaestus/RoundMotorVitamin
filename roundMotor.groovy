@@ -24,14 +24,14 @@ CSG getNut(){
 	double dShaftStart = totalShaftLength-dShaftSection
 	double shaftRadius = (shaftDiameter/2)+printerOffset.getMM()
 	LengthParameter boltLength		= new LengthParameter("Bolt Length",10,[180,10])
-	boltLength.setMM(shaftCollarHeight)
+	boltLength.setMM(dShaftStart)
 	CSG body =new Cylinder(motorBodyRadius,motorBodyRadius,bodyLength,(int)30).toCSG() // a one line Cylinder
 				.toZMax()
 	CSG collar =new Cylinder(shaftCollarDiameter,shaftCollarDiameter,shaftCollarHeight,(int)30).toCSG() // a one line Cylinder
 	CSG shaft =new Cylinder(shaftRadius,shaftRadius,dShaftStart,(int)30).toCSG() // a one line Cylinder
 	CSG bolt = Vitamins.get(config.boltType,config.boltSize)
 				.toolOffset(printerOffset.getMM())
-				.movez(printerOffset.getMM())
+				.movez(printerOffset.getMM()/2)
 				.rotx(180)
 				.movey(boltHoleDiameter/2)
 
