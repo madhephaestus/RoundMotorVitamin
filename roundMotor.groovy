@@ -35,14 +35,7 @@ CSG getNut(){
 				.rotx(180)
 				.movey(boltHoleDiameter/2)
 
-	pshaft=(CSG)ScriptingEngine
-				    .gitScriptRun(
-					"https://github.com/WPIRoboticsEngineering/RBELabCustomParts.git", // git location of the library
-					      "dShaft.groovy" , // file to load
-					      [shaftDiameter,configShaft.shaftDSectionDiameter,dShaftSection]
-				)
-				.movez(dShaftStart)
-				.union([collar,shaft])
+	pshaft=CSG.unionAll([collar,shaft])
 						.movex(shaftCenterOffset)
 	CSG bolts = bolt
 	for(int i=config.boltHolePatternAngleOffset;i<360;i+=config.boltHolePatternAngleIncrement){
