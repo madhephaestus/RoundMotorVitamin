@@ -31,8 +31,9 @@ CSG getNut(){
 	CSG shaft =new Cylinder(shaftRadius,shaftRadius,dShaftStart,(int)30).toCSG() // a one line Cylinder
 	CSG bolt = Vitamins.get(config.boltType,config.boltSize)
 				.toolOffset(printerOffset.getMM())
-				.movez(printerOffset.getMM()/2)
-				.rotx(180)
+				.toZMax()
+				.movez(dShaftStart)
+				//.rotx(180)
 				.movey(boltHoleDiameter/2)
 
 	pshaft=CSG.unionAll([collar,shaft])
