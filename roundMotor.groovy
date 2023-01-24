@@ -44,8 +44,8 @@ CSG getNut(){
 	if(boltConfig.get("boltLength")!=null)
 		boltLength.setMM(boltConfig.get("boltLength"))
 
-	println boltConfig
-	println boltLength.getMM()
+	//println boltConfig
+	//println boltLength.getMM()
 	CSG head =new Cylinder(headDiameter/2,headDiameter/2,headHeight,20).toCSG() // a one line Cylinder
 				.toZMin()
 	CSG boltshaft =new Cylinder(outerDiameter/2,outerDiameter/2,boltLength.getMM(),20).toCSG() // a one line Cylinder
