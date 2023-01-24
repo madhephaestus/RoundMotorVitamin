@@ -1,4 +1,9 @@
+import com.neuronrobotics.bowlerstudio.vitamins.Vitamins
+
+import eu.mihosoft.vrl.v3d.CSG
+import eu.mihosoft.vrl.v3d.Cylinder
 import eu.mihosoft.vrl.v3d.parametrics.*;
+import eu.mihosoft.vrl.v3d.Transform;
 
 CSG getNut(){
 	String type= "roundMotor"
@@ -27,10 +32,25 @@ CSG getNut(){
 	boltLength.setMM(dShaftStart)
 	CSG body =new Cylinder(motorBodyRadius,motorBodyRadius,bodyLength,(int)30).toCSG() // a one line Cylinder
 				.toZMax()
-	CSG collar =new Cylinder(shaftCollarDiameter,shaftCollarDiameter,shaftCollarHeight,(int)30).toCSG() // a one line Cylinder
-	CSG shaft =new Cylinder(shaftRadius,shaftRadius,dShaftStart,(int)30).toCSG() // a one line Cylinder
-	CSG bolt = Vitamins.get(config.boltType,config.boltSize)
-				.toolOffset(printerOffset.getMM())
+	CSG collar =new Cylinder(shaftCollarDiameter,shaftCollarDiameter,shaftCollarHeight,(int)20).toCSG() // a one line Cylinder
+	CSG shaft =new Cylinder(shaftRadius,shaftRadius,dShaftStart,(int)20).toCSG() // a one line Cylinder
+	
+	HashMap<String,Object> boltConfig = Vitamins.getConfiguration( config.boltType,config.boltSize)
+	def headDiameter=Double.parseDouble(boltConfig.get("headDiameter").toString())+printerOffset.getMM()
+	def headHeight=Double.parseDouble(boltConfig.get("headHeight").toString())
+	def keyDepth=Double.parseDouble(boltConfig.get("keyDepth").toString())
+	def keySize=Double.parseDouble(boltConfig.get("keySize").toString())
+	def outerDiameter=Double.parseDouble(boltConfig.get("outerDiameter").toString())+printerOffset.getMM()
+	if(boltConfig.get("boltLength")!=null)
+		boltLength.setMM(boltConfig.get("boltLength"))
+
+	println boltConfig
+	println boltLength.getMM()
+	CSG head =new Cylinder(headDiameter/2,headDiameter/2,headHeight,20).toCSG() // a one line Cylinder
+				.toZMin()
+	CSG boltshaft =new Cylinder(outerDiameter/2,outerDiameter/2,boltLength.getMM(),20).toCSG() // a one line Cylinder
+				.toZMax()	
+	CSG bolt = head.union(boltshaft)
 				.toZMax()
 				.movez(dShaftStart)
 				//.rotx(180)
@@ -52,7 +72,7 @@ CSG getNut(){
 	wholeMotor.addSlicePlane(new Transform()
 						.movez(shaftCollarHeight+0.1)
 	)
-	//return wholeMotor
+	//return bolt
 	return wholeMotor
 		.setParameter(size)
 		.setRegenerate({getNut()})
