@@ -8,7 +8,8 @@ import eu.mihosoft.vrl.v3d.Transform;
 CSG getNut(){
 	String type= "roundMotor"
 	if(args==null)
-		args=["WPI-gb37y3530-50en"]
+		args=["RF-500TB-18280"]
+	println Vitamins.listVitaminSizes(type)
 	StringParameter size = new StringParameter(	type+" Default",
 										args.get(0),
 										Vitamins.listVitaminSizes(type))
@@ -27,6 +28,8 @@ CSG getNut(){
 	double totalShaftLength = config.totalShaftLength
 	double dShaftSection =configShaft.length
 	double dShaftStart = totalShaftLength-dShaftSection
+	if(dShaftStart<1)
+		dShaftStart=1
 	double shaftRadius = (shaftDiameter/2)+printerOffset.getMM()
 	LengthParameter boltLength		= new LengthParameter("Bolt Length",10,[180,10])
 	boltLength.setMM(dShaftStart)
