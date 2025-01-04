@@ -28,8 +28,8 @@ CSG getNut(){
 	double totalShaftLength = config.totalShaftLength
 	double dShaftSection =configShaft.length
 	double dShaftStart = totalShaftLength-dShaftSection
-	if(dShaftStart<1)
-		dShaftStart=1
+	if(dShaftStart<5)
+		dShaftStart=5
 	double shaftRadius = (shaftDiameter/2)+printerOffset.getMM()
 	LengthParameter boltLength		= new LengthParameter("Bolt Length",10,[180,10])
 	boltLength.setMM(dShaftStart)
