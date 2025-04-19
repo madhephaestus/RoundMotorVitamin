@@ -23,7 +23,10 @@ CSG getNut(){
 	double shaftCollarHeight = config.shaftCollarHeight 
 	double motorBodyRadius = (config.motorBodyRadius/2.0)+printerOffset.getMM()
 	double bodyLength=config.bodyLength
-	HashMap<String,Object> configShaft = Vitamins.getConfiguration( "dShaft",config.dshaft)
+	String shaftType = config.get("shaftType")
+	String shaftSize = config.get(shaftType)
+	println "Type = "+shaftType+" size "+shaftSize
+	HashMap<String,Object> configShaft = Vitamins.getConfiguration( shaftType,shaftSize)
 	double shaftDiameter = configShaft.shaftDiameter
 	double totalShaftLength = config.totalShaftLength
 	double dShaftSection =configShaft.length

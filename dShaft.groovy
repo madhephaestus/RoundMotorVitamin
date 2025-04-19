@@ -1,3 +1,4 @@
+import eu.mihosoft.vrl.v3d.CSG
 import eu.mihosoft.vrl.v3d.parametrics.*;
 CSG getNut(){
 	String type= "dShaft"
